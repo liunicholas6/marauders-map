@@ -1,7 +1,7 @@
 import {vec3, vec4} from 'gl-matrix';
 import Drawable from '../rendering/gl/Drawable';
 import {gl} from '../globals';
-import Curve from '../Curves/Curve';
+import { Curve, curveLength, curvePoint } from '../Curves/Curve';
 
 const MIN_SEG_DENSITY = 32;
 
@@ -22,8 +22,10 @@ class CurveDrawable extends Drawable {
     let normals : number[] = [];
     
     for (const curve of this.curves) {
+      console.log(curve);
+      console.log(curveLength(curve));
       let indicesOffset = positions.length / 4;
-      let length = curve.length();
+      let length = curveLength(curve);
       let segmentCount = Math.ceil(MIN_SEG_DENSITY * length);
       let segLen = length / segmentCount;
       
@@ -32,7 +34,7 @@ class CurveDrawable extends Drawable {
       }
       
       for (let i = 0; i <= segmentCount; i++) {
-          let point = curve.point(i * segLen);
+          let point = curvePoint(curve, i * segLen);
           positions.push(point[0], point[1], 0, 1);
           normals.push(0, 0, 1, 0);
       }

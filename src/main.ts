@@ -5,11 +5,9 @@ import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
-import Curve from './Curves/Curve';
-import { ArcCurve } from './Curves/ArcCurve';
+import { Curve, newArcCurve } from './Curves/Curve';
 import Drawable from './rendering/gl/Drawable';
-import { Block } from './grammar/Block';
-import { NavGraphBuilder } from './navgraph/NavGraphBuilder';
+import CurveDrawable from './geometry/CurveDrawable';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
@@ -17,14 +15,12 @@ const controls = {
   'Load Scene': loadScene, // A function pointer, essentially
 };
 
-let builder : NavGraphBuilder
-let block : Block;
+let curve : Curve
 let drawable : Drawable;
 
 function loadScene() {
-  builder = new NavGraphBuilder();
-  block = Block.createInstance(builder, vec2.fromValues(0, 0), vec2.fromValues(1, 1));
-  drawable = builder.toDrawable();
+  curve = newArcCurve(1, 0, 2 * Math.PI);
+  drawable = new CurveDrawable([curve]);
   drawable.create();
 }
 

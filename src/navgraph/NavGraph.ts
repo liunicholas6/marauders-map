@@ -1,7 +1,8 @@
 import {vec2} from "gl-matrix"
-import Curve from "../Curves/Curve"
+import {Curve} from "../Curves/Curve"
 
 export enum VertexType {
+    Exterior,
     Hall,
     Door,
     Room,
@@ -10,7 +11,7 @@ export enum VertexType {
 export type Vertex =
     number & { readonly __tag: unique symbol };
 
-export interface Edge {
+export type Edge = {
     v : Vertex;
     curve : Curve;
 }
