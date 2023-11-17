@@ -22,8 +22,6 @@ class CurveDrawable extends Drawable {
     let normals : number[] = [];
     
     for (const curve of this.curves) {
-      console.log(curve);
-      console.log(curveLength(curve));
       let indicesOffset = positions.length / 4;
       let length = curveLength(curve);
       let segmentCount = Math.ceil(MIN_SEG_DENSITY * length);
@@ -39,8 +37,6 @@ class CurveDrawable extends Drawable {
           normals.push(0, 0, 1, 0);
       }
     }
-
-    console.log(indices);
     
     this.indices = new Uint32Array(indices);
     this.normals = new Float32Array(normals);

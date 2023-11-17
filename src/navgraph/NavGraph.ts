@@ -1,35 +1,32 @@
 import {vec2} from "gl-matrix"
 import {Curve} from "../Curves/Curve"
+import { Region } from "../Regions/Regions"
 
-export enum VertexType {
-    Exterior,
-    Hall,
-    Door,
-    Room,
+export enum VertexTag {
+    Intersection,
+    Room
 }
 
-export type Vertex =
-    number & { readonly __tag: unique symbol };
+export enum EdgeTag {
+    Hallway,
+    Door
+}
+
+export type VertexId = number
+
+export type Vertex = {
+    region : Region
+    tag?: VertexTag
+}
 
 export type Edge = {
-    v : Vertex;
+    v : VertexId;
     curve : Curve;
+    tag?: EdgeTag;
 }
 
-export class NavGraph {
-    vertexTypes : VertexType[];
-    adjList : Edge[][]
-
-    constructor(typeList : VertexType[], adjList : Edge[][]) {
-        this.vertexTypes = typeList;
-        this.adjList = adjList;
-    }
-    
-    getType(v : Vertex) : VertexType {
-        return this.vertexTypes[v as number];
-    }
-
-    getEdges(v : Vertex) : Edge[] {
-        return this.adjList[v as number]
-    }
+export type NavGraph = {
+    numVerts : VertexId
+    verts: Vertex[]
+    adjList: Edge[][]
 }
