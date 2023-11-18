@@ -28,10 +28,15 @@ namespace Geom
             return Vector2.Lerp(P0, P1, t);
         }
 
-        public (ICurve, ICurve) Split(float t)
+        public (ICurve, Vector2, ICurve) Split(float t)
         {
             Vector2 point = Point(t);
-            return (new LineCurve(P0, point), new LineCurve(point, P1));
+            return (new LineCurve(P0, point), point, new LineCurve(point, P1));
+        }
+
+        public ICurve Reverse()
+        {
+            return new LineCurve(P1, P0);
         }
     }
 }
