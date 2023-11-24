@@ -17,15 +17,15 @@ namespace GraphBuilder
             public int FromVertex { get; private set; }
             public bool Navigable { get;}
 
-            private int ToVertex 
+            public int ToVertex 
             { 
                 get => EdgeInfo.ToVertex;
-                set => EdgeInfo.ToVertex = value; 
+                private set => EdgeInfo.ToVertex = value; 
             }
 
-            private ICurve Curve { 
+            public ICurve Curve { 
                 get => EdgeInfo.Curve;
-                set => EdgeInfo.Curve = value; 
+                private set => EdgeInfo.Curve = value; 
             }
             public EdgeTag Tag { 
                 get => EdgeInfo.Tag;
@@ -90,6 +90,21 @@ namespace GraphBuilder
         {
             var curve = new LineCurve(GetPosition(fromVertexId), GetPosition(toVertexId));
             return AddEdge(new BEdge(fromVertexId.Id, toVertexId.Id, navigable, tag, curve));
+        }
+
+        public VertexId GetFromVertex(EdgeId edgeId)
+        {
+            return new VertexId(_edges[edgeId.Id].FromVertex);
+        }
+        
+        public VertexId GetToVertex(EdgeId edgeId)
+        {
+            return new VertexId(_edges[edgeId.Id].ToVertex);
+        }
+        
+        public ICurve GetCurve(EdgeId edgeId)
+        {
+            return _edges[edgeId.Id].Curve;
         }
 
         public (EdgeId, VertexId, EdgeId) SplitEdge(EdgeId edgeId, float t, VertexTag vertexTag = VertexTag.None)
