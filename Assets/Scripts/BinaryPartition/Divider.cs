@@ -30,7 +30,7 @@ namespace BinaryPartition
             _incidentDividers.Add(divider);
         }
 
-        private void AppendLines(bool isVertical, ICollection<LineCurve> lines)
+        private IEnumerable<(Vector2, Vector2)> GetSegments()
         {
             var ax = AxisValue;
             Func<float, Vector2> toPoint = ParAxis == 0 ?
@@ -39,30 +39,24 @@ namespace BinaryPartition
             
             if (_incidentDividers.Count == 0)
             {
-                lines.Add( new LineCurve(toPoint(_start), toPoint(_end)));
+                return new[] {(toPoint(_start), toPoint(_end))};
             }
-            else
-            {
-                var segStarts =
-                    new[] {_start}
-                        .Concat(_incidentDividers.Select(divider => divider.AxisValue))
-                        .Select(v => v + EdgeGap);
 
-                var segEnds =
-                    _incidentDividers.Select(divider => divider.AxisValue)
-                        .Concat(new[] {_end})
-                        .Select(v => v - EdgeGap);
+            var segStarts =
+                new[] {_start}
+                    .Concat(_incidentDividers.Select(divider => divider.AxisValue))
+                    .Select(v => v + EdgeGap);
 
-                var segments = segStarts.Zip(segEnds,
-                    (a, b) => new LineCurve(toPoint(a), toPoint(b)));
+            var segEnds =
+                _incidentDividers.Select(divider => divider.AxisValue)
+                    .Concat(new[] {_end})
+                    .Select(v => v - EdgeGap);
 
-                lines.AddRange(segments);
+            var segments = segStarts.Zip<float, float, (Vector2, Vector2)>(segEnds,
+                (a, b) => (toPoint(a), toPoint(b)));
 
-                foreach (var divider in _incidentDividers)
-                {
-                    divider.AppendLines(!isVertical, lines);
-                }
-            }
+            return _incidentDividers.Aggregate(segments,
+                (current, divider) => current.Concat(divider.GetSegments()));
         }
     }
 }
