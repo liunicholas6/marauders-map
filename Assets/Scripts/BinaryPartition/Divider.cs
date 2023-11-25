@@ -35,13 +35,13 @@ namespace BinaryPartition
             {
                 var segStarts =
                     new[] {_start}
-                    .Concat(_incidentDividers.Select(divider => divider.AxisValue))
-                    .Select(v => v + EdgeGap);
-                
+                        .Concat(_incidentDividers.Select(divider => divider.AxisValue))
+                        .Select(v => v + EdgeGap);
+
                 var segEnds =
                     _incidentDividers.Select(divider => divider.AxisValue)
-                    .Concat(new[] {_end})
-                    .Select(v => v - EdgeGap);
+                        .Concat(new[] {_end})
+                        .Select(v => v - EdgeGap);
 
                 var segments = segStarts.Zip(segEnds,
                     (a, b) => new LineCurve(toPoint(a), toPoint(b)));
@@ -55,7 +55,4 @@ namespace BinaryPartition
             }
         }
     }
-    
-    
-    
 }
