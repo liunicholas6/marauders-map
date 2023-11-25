@@ -60,7 +60,7 @@ namespace BinaryPartition
         
         private DividerBox _dividers;
         
-        private Divider _splitDivider;
+        public Divider SplitDivider;
 
         private BinaryRoom _leftChild;
         private BinaryRoom _rightChild;
@@ -131,7 +131,7 @@ namespace BinaryPartition
                 _rectangle.Min[perpAxis] + MinDims[perpAxis], 
                 _rectangle.Max[perpAxis] - MinDims[perpAxis], 
                 Random.value);
-            _splitDivider = new Divider(v, parAxis, _rectangle);
+            SplitDivider = new Divider(v, parAxis, _rectangle);
             
             var leftRect = _rectangle;
             leftRect.Max[perpAxis] = v;
@@ -141,11 +141,11 @@ namespace BinaryPartition
                 _dividers = _dividers
             };
             _leftChild._rectangle.Max[perpAxis] = v;
-            _leftChild._dividers.SetDivider(perpAxis, false, _splitDivider);
+            _leftChild._dividers.SetDivider(perpAxis, false, SplitDivider);
             _leftChild.RandomSplit();
 
-            _dividers.GetDivider(parAxis, false)?.AddDivider(_splitDivider);
-            _dividers.GetDivider(parAxis, true)?.AddDivider(_splitDivider);
+            _dividers.GetDivider(parAxis, false)?.AddDivider(SplitDivider);
+            _dividers.GetDivider(parAxis, true)?.AddDivider(SplitDivider);
             
             _rightChild = new BinaryRoom
             {
@@ -153,7 +153,7 @@ namespace BinaryPartition
                 _dividers = _dividers
             };
             _rightChild._rectangle.Min[perpAxis] = v;
-            _rightChild._dividers.SetDivider(perpAxis, true, _splitDivider);
+            _rightChild._dividers.SetDivider(perpAxis, true, SplitDivider);
             _rightChild.RandomSplit();
         }
     }

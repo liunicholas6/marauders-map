@@ -30,7 +30,7 @@ namespace BinaryPartition
             _incidentDividers.Add(divider);
         }
 
-        private IEnumerable<(Vector2, Vector2)> GetSegments()
+        public IEnumerable<(Vector2, Vector2)> GetSegments()
         {
             var ax = AxisValue;
             Func<float, Vector2> toPoint = ParAxis == 0 ?

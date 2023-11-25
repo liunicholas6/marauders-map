@@ -22,6 +22,11 @@ namespace MyDebug
             {
                 _drawables.Add(new DebugRect(rect));
             }
+
+            foreach (var (a, b) in room.SplitDivider.GetSegments())
+            {
+                _drawables.Add(new DebugSegment { P0 = a, P1 = b });
+            }
         }
 
         // Update is called once per frame
