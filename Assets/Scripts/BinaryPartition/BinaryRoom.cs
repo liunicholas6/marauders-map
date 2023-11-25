@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace BinaryPartition
 {
@@ -10,6 +12,55 @@ namespace BinaryPartition
         private const float TrimSize = 1;
 
         private Rectangle _rectangle;
+        
+        private struct DividerBox
+        {
+            public Divider? Top;
+            public Divider? Bottom;
+            public Divider? Left;
+            public Divider? Right;
+
+            public Divider? GetDivider(int axis, bool isMin)
+            {
+                switch (axis)
+                {
+                    case 0: return isMin ? Left : Right;
+                    case 1: return isMin ? Bottom : Top;
+                    default: throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            public void SetDivider(int axis, bool isMin, Divider divider)
+            {
+                switch (axis)
+                {
+                    case 0:
+                        if (isMin)
+                        {
+                            Left = divider;
+                        }
+                        else
+                        {
+                            Right = divider;
+                        }
+                        break;
+                    case 1: if (isMin)
+                        {
+                            Bottom = divider;
+                        }
+                        else
+                        {
+                            Top = divider;
+                        }
+                        break;
+                    default: throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+        
+        private DividerBox _dividers;
+        
+        private Divider _splitDivider;
 
         private BinaryRoom _leftChild;
         private BinaryRoom _rightChild;
@@ -74,19 +125,35 @@ namespace BinaryPartition
 
         private void SplitPerpToAxis(int perpAxis)
         {
+            int parAxis = 1 - perpAxis;
+            
             var v = Mathf.Lerp(
                 _rectangle.Min[perpAxis] + MinDims[perpAxis], 
                 _rectangle.Max[perpAxis] - MinDims[perpAxis], 
                 Random.value);
-
+            _splitDivider = new Divider(v, parAxis, _rectangle);
+            
             var leftRect = _rectangle;
             leftRect.Max[perpAxis] = v;
-            _leftChild = new BinaryRoom(leftRect);
+            _leftChild = new BinaryRoom
+            {
+                _rectangle = _rectangle,
+                _dividers = _dividers
+            };
+            _leftChild._rectangle.Max[perpAxis] = v;
+            _leftChild._dividers.SetDivider(perpAxis, false, _splitDivider);
             _leftChild.RandomSplit();
 
-            var rightRect = _rectangle;
-            rightRect.Min[perpAxis] = v;
-            _rightChild = new BinaryRoom(rightRect);
+            _dividers.GetDivider(parAxis, false)?.AddDivider(_splitDivider);
+            _dividers.GetDivider(parAxis, true)?.AddDivider(_splitDivider);
+            
+            _rightChild = new BinaryRoom
+            {
+                _rectangle = _rectangle,
+                _dividers = _dividers
+            };
+            _rightChild._rectangle.Min[perpAxis] = v;
+            _rightChild._dividers.SetDivider(perpAxis, true, _splitDivider);
             _rightChild.RandomSplit();
         }
     }
