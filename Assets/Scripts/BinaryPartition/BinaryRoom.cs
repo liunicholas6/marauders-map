@@ -23,6 +23,11 @@ namespace BinaryPartition
             _rectangle = rectangle;
         }
 
+        private BinaryRoom()
+        {
+            
+        }
+
         public void RandomSplit()
         {
             var rand = Random.value;
@@ -73,15 +78,17 @@ namespace BinaryPartition
         {
             _splitAxis = SplitAxis.Horizontal;
             var splitY = Mathf.Lerp(_rectangle.MinY + MinHeight, _rectangle.MaxY - MinHeight, Random.value);
-            
-            var leftRect = _rectangle;
+
+            var leftRect = _rectangle.Clone();
             leftRect.MaxY = splitY;
             _leftChild = new BinaryRoom(leftRect);
+            
             _leftChild.RandomSplit();
 
-            var rightRect = _rectangle;
+            var rightRect = _rectangle.Clone();
             rightRect.MinY = splitY;
             _rightChild = new BinaryRoom(rightRect);
+            
             _rightChild.RandomSplit();
         }
 
@@ -90,12 +97,12 @@ namespace BinaryPartition
             _splitAxis = SplitAxis.Vertical;
             var splitX = Mathf.Lerp(_rectangle.MinX + MinWidth, _rectangle.MaxX - MinWidth, Random.value);
             
-            var leftRect = _rectangle;
+            var leftRect = _rectangle.Clone();
             leftRect.MaxX = splitX;
             _leftChild = new BinaryRoom(leftRect);
             _leftChild.RandomSplit();
 
-            var rightRect = _rectangle;
+            var rightRect = _rectangle.Clone();
             rightRect.MinX = splitX;
             _rightChild = new BinaryRoom(rightRect);
             _rightChild.RandomSplit();
