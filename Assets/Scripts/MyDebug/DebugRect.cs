@@ -18,10 +18,10 @@ namespace MyDebug
 
         public void Draw(Color color)
         {
-            Debug.DrawLine(new Vector3(Rectangle.MinX, Rectangle.MinY), new Vector3(Rectangle.MinX, Rectangle.MaxY), color);
-            Debug.DrawLine(new Vector3(Rectangle.MinX, Rectangle.MaxY), new Vector3(Rectangle.MaxX, Rectangle.MaxY), color);
-            Debug.DrawLine(new Vector3(Rectangle.MaxX, Rectangle.MaxY), new Vector3(Rectangle.MaxX, Rectangle.MinY), color);
-            Debug.DrawLine(new Vector3(Rectangle.MaxX, Rectangle.MinY), new Vector3(Rectangle.MinX, Rectangle.MinY), color);
+            Debug.DrawLine(new Vector3(Rectangle.Min[0], Rectangle.Min[1]), new Vector3(Rectangle.Min[0], Rectangle.Max[1]), color);
+            Debug.DrawLine(new Vector3(Rectangle.Min[0], Rectangle.Max[1]), new Vector3(Rectangle.Max[0], Rectangle.Max[1]), color);
+            Debug.DrawLine(new Vector3(Rectangle.Max[0], Rectangle.Max[1]), new Vector3(Rectangle.Max[0], Rectangle.Min[1]), color);
+            Debug.DrawLine(new Vector3(Rectangle.Max[0], Rectangle.Min[1]), new Vector3(Rectangle.Min[0], Rectangle.Min[1]), color);
         }
         
     }

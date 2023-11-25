@@ -1,22 +1,22 @@
 using System.Collections.Generic;
-using UnityEditor.Sprites;
 using UnityEngine;
 
 namespace BinaryPartition
 {
     public class BinaryRoom
     {
-        private const float MinWidth = 8;
-        private const float MaxWidth = 20;
-        private const float MinHeight = 8;
-        private const float MaxHeight = 20;
+        private static readonly Vector2 MinDims = new Vector2(8, 8);
+        private static readonly Vector2 MaxDims = new Vector2(20, 20);
         private const float TrimSize = 1;
 
         private Rectangle _rectangle;
 
-        private SplitAxis _splitAxis = SplitAxis.None;
         private BinaryRoom _leftChild;
         private BinaryRoom _rightChild;
+        private bool IsLeaf
+        {
+            get => _leftChild == null && _rightChild == null; 
+        }
         
         public BinaryRoom(Rectangle rectangle)
         {
@@ -32,21 +32,21 @@ namespace BinaryPartition
         {
             var rand = Random.value;
             
-            if (rand < 0.5f && _rectangle.GetWidth() >= 2 * MinWidth)
+            if (rand < 0.5f && _rectangle.GetDim(0) >= 2 * MinDims[0])
             {
-                SplitVertical();
+                SplitPerpToAxis(0);
             }
-            else if (_rectangle.GetHeight() >= 2 * MinHeight)
+            else if (_rectangle.GetDim(1) >= 2 * MinDims[1])
             {
-                SplitHorizontal();
+                SplitPerpToAxis(1);
             }
-            else if (_rectangle.GetWidth() > MaxWidth)
+            else if (_rectangle.GetDim(0) > MaxDims[0])
             {
-                SplitVertical();
+                SplitPerpToAxis(0);
             }
-            else if (_rectangle.GetHeight() > MaxHeight)
+            else if (_rectangle.GetDim(1) > MaxDims[1])
             {
-                SplitHorizontal();
+                SplitPerpToAxis(1);
             }
         }
 
@@ -59,56 +59,35 @@ namespace BinaryPartition
 
         public void AppendRects(ICollection<Rectangle> list)
         {
-            if (_splitAxis == SplitAxis.None)
+            if (IsLeaf)
             {
                 list.Add(new Rectangle
                 {
-                    MaxX = _rectangle.MaxX - TrimSize,
-                    MinX = _rectangle.MinX + TrimSize,
-                    MinY = _rectangle.MinY + TrimSize,
-                    MaxY = _rectangle.MaxY - TrimSize
+                    Max = _rectangle.Max - new Vector2(TrimSize, TrimSize),
+                    Min = _rectangle.Min + new Vector2(TrimSize, TrimSize)
                 });
                 return;
             }
             _leftChild.AppendRects(list);
             _rightChild.AppendRects(list);
         }
-        
-        private void SplitHorizontal()
+
+        private void SplitPerpToAxis(int perpAxis)
         {
-            _splitAxis = SplitAxis.Horizontal;
-            var splitY = Mathf.Lerp(_rectangle.MinY + MinHeight, _rectangle.MaxY - MinHeight, Random.value);
+            var v = Mathf.Lerp(
+                _rectangle.Min[perpAxis] + MinDims[perpAxis], 
+                _rectangle.Max[perpAxis] - MinDims[perpAxis], 
+                Random.value);
 
-            var leftRect = _rectangle.Clone();
-            leftRect.MaxY = splitY;
-            _leftChild = new BinaryRoom(leftRect);
-            
-            _leftChild.RandomSplit();
-
-            var rightRect = _rectangle.Clone();
-            rightRect.MinY = splitY;
-            _rightChild = new BinaryRoom(rightRect);
-            
-            _rightChild.RandomSplit();
-        }
-
-        private void SplitVertical()
-        {
-            _splitAxis = SplitAxis.Vertical;
-            var splitX = Mathf.Lerp(_rectangle.MinX + MinWidth, _rectangle.MaxX - MinWidth, Random.value);
-            
-            var leftRect = _rectangle.Clone();
-            leftRect.MaxX = splitX;
+            var leftRect = _rectangle;
+            leftRect.Max[perpAxis] = v;
             _leftChild = new BinaryRoom(leftRect);
             _leftChild.RandomSplit();
 
-            var rightRect = _rectangle.Clone();
-            rightRect.MinX = splitX;
+            var rightRect = _rectangle;
+            rightRect.Min[perpAxis] = v;
             _rightChild = new BinaryRoom(rightRect);
             _rightChild.RandomSplit();
         }
-        
-        
-
     }
 }

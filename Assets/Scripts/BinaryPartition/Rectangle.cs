@@ -1,30 +1,20 @@
+using UnityEngine;
+
 namespace BinaryPartition
 {
-    public class Rectangle
+    public struct Rectangle
     {
-        public float MinX;
-        public float MinY;
-        public float MaxX;
-        public float MaxY;
+        public Vector2 Min;
+        public Vector2 Max;
 
         public static Rectangle UnitSquare()
         {
-            return new Rectangle { MinX = -1, MaxX = 1, MinY = -1, MaxY = 1 };
+            return new Rectangle { Min = new Vector2(-1, -1), Max = new Vector2(1,1) };
         }
 
-        public Rectangle Clone()
+        public float GetDim(int dim)
         {
-            return new Rectangle { MinX = MinX,MinY = MinY, MaxX = MaxX, MaxY = MaxY };
-        }
-
-        public float GetWidth()
-        {
-            return MaxX - MinX;
-        }
-
-        public float GetHeight()
-        {
-            return MaxY - MinY;
+            return Max[dim] - Min[dim];
         }
     }
     

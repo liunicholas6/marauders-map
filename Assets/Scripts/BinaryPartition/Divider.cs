@@ -10,10 +10,20 @@ namespace BinaryPartition
     public struct Divider
     {
         private const float EdgeGap = 0.25f;
+        public int ParAxis;
         public float AxisValue { get; }
         private float _start;
         private float _end;
         private List<Divider> _incidentDividers;
+
+        public Divider(float axisValue, int parAxis, Rectangle rectangle)
+        {
+            AxisValue = axisValue;
+            ParAxis = parAxis;
+            _start = rectangle.Min[ParAxis];
+            _end = rectangle.Max[ParAxis];
+            _incidentDividers = new List<Divider>();
+        }
 
         public void AddDivider(Divider divider)
         {
@@ -23,10 +33,10 @@ namespace BinaryPartition
         private void AppendLines(bool isVertical, ICollection<LineCurve> lines)
         {
             var ax = AxisValue;
-            Func<float, Vector2> toPoint = isVertical ? 
-                n => new Vector2(n, ax) :
-                n => new Vector2(ax, n);
-
+            Func<float, Vector2> toPoint = ParAxis == 0 ?
+                n => new Vector2(ax, n) :
+                n => new Vector2(n, ax);
+            
             if (_incidentDividers.Count == 0)
             {
                 lines.Add( new LineCurve(toPoint(_start), toPoint(_end)));

@@ -5,7 +5,7 @@ using Random = UnityEngine.Random;
 
 namespace Geom
 {
-    public class PolygonRegion : IRegion
+    public struct PolygonRegion : IRegion
     {
         private List<Vector2> _boundary;
         private Vector2 _centerPoint;
@@ -18,14 +18,22 @@ namespace Geom
         public PolygonRegion(List<Vector2> boundary)
         {
             _boundary = boundary;
-            
+            _centerPoint = new Vector2();
+            _area = 0;
+        }
+
+        public void CalcCenterPoint()
+        {
             _centerPoint = new Vector2();
             foreach (var point in _boundary)
             {
                 _centerPoint += point;
             }
             _centerPoint /= _boundary.Count;
+        }
 
+        public void CalcArea()
+        {
             _area = 0;
             var p0 = _boundary[0];
             
@@ -37,6 +45,12 @@ namespace Geom
             }
 
             _area /= 2;
+        }
+
+        public void CalcAll()
+        {
+            CalcCenterPoint();
+            CalcArea();
         }
 
         public Vector2 RandPoint()
@@ -52,6 +66,13 @@ namespace Geom
             return res / _boundary.Count;
         }
 
-        
+        public void Shrink(float delta)
+        {
+            for (int i = 0; i < _boundary.Count; i++)
+            {
+                Vector2 r = (_centerPoint - _boundary[i]).normalized;
+                _boundary[i] += delta * r;
+            }
+        }
     }
 }

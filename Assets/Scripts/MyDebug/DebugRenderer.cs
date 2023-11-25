@@ -15,7 +15,7 @@ namespace MyDebug
             Debug.Log("Running Debug Renderer");
             BinaryRoom room = new BinaryRoom(new Rectangle
             {
-                MinX = -100, MinY = -100, MaxX = 100, MaxY = 100
+                Min = new Vector2(-100, -100), Max = new Vector2(100, 100)
             });
             room.RandomSplit();
             foreach (var rect in room.GetRects())
