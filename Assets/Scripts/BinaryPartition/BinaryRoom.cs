@@ -1,6 +1,10 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 using Random = UnityEngine.Random;
 
 namespace BinaryPartition
@@ -12,58 +16,68 @@ namespace BinaryPartition
         private const float TrimSize = 1;
 
         private Rectangle _rectangle;
-        
-        private struct DividerBox
+
+        private struct DividerBounds
         {
-            public Divider? Top;
-            public Divider? Bottom;
-            public Divider? Left;
-            public Divider? Right;
-
-            public Divider? GetDivider(int axis, bool isMin)
-            {
-                switch (axis)
-                {
-                    case 0: return isMin ? Left : Right;
-                    case 1: return isMin ? Bottom : Top;
-                    default: throw new ArgumentOutOfRangeException();
-                }
-            }
-
-            public void SetDivider(int axis, bool isMin, Divider divider)
-            {
-                switch (axis)
-                {
-                    case 0:
-                        if (isMin)
-                        {
-                            Left = divider;
-                        }
-                        else
-                        {
-                            Right = divider;
-                        }
-                        break;
-                    case 1: if (isMin)
-                        {
-                            Bottom = divider;
-                        }
-                        else
-                        {
-                            Top = divider;
-                        }
-                        break;
-                    default: throw new ArgumentOutOfRangeException();
-                }
-            }
+            public Divider? Low;
+            public Divider? High;
         }
         
-        private DividerBox _dividers;
+        // private struct DividerBox
+        // {
+        //     public Divider? Top;
+        //     public Divider? Bottom;
+        //     public Divider? Left;
+        //     public Divider? Right;
+        //
+        //     public Divider? GetDivider(int axis, bool isMin)
+        //     {
+        //         switch (axis)
+        //         {
+        //             case 0: return isMin ? Left : Right;
+        //             case 1: return isMin ? Bottom : Top;
+        //             default: throw new ArgumentOutOfRangeException();
+        //         }
+        //     }
+        //
+        //     public void SetDivider(int axis, bool isMin, Divider divider)
+        //     {
+        //         switch (axis)
+        //         {
+        //             case 0:
+        //                 if (isMin)
+        //                 {
+        //                     Left = divider;
+        //                 }
+        //                 else
+        //                 {
+        //                     Right = divider;
+        //                 }
+        //                 break;
+        //             case 1: if (isMin)
+        //                 {
+        //                     Bottom = divider;
+        //                 }
+        //                 else
+        //                 {
+        //                     Top = divider;
+        //                 }
+        //                 break;
+        //             default: throw new ArgumentOutOfRangeException();
+        //         }
+        //     }
+        // }
         
-        public Divider SplitDivider;
+        private DividerBounds[] _dividers =
+        {
+            new() {Low = null, High = null},
+            new() {Low = null, High = null}
+        };
+        
+        public Divider? SplitDivider;
 
-        private BinaryRoom _leftChild;
-        private BinaryRoom _rightChild;
+        private BinaryRoom? _leftChild;
+        private BinaryRoom? _rightChild;
         private bool IsLeaf
         {
             get => _leftChild == null && _rightChild == null; 
@@ -119,8 +133,8 @@ namespace BinaryPartition
                 });
                 return;
             }
-            _leftChild.AppendRects(list);
-            _rightChild.AppendRects(list);
+            _leftChild?.AppendRects(list);
+            _rightChild?.AppendRects(list);
         }
 
         private void SplitPerpToAxis(int perpAxis)
@@ -138,22 +152,22 @@ namespace BinaryPartition
             _leftChild = new BinaryRoom
             {
                 _rectangle = _rectangle,
-                _dividers = _dividers
+                _dividers = _dividers.ToArray()
             };
             _leftChild._rectangle.Max[perpAxis] = v;
-            _leftChild._dividers.SetDivider(perpAxis, false, SplitDivider);
+            _leftChild._dividers[perpAxis].High = SplitDivider;
             _leftChild.RandomSplit();
 
-            _dividers.GetDivider(parAxis, false)?.AddBelow(SplitDivider);
-            _dividers.GetDivider(parAxis, true)?.AddAbove(SplitDivider);
+            _dividers[parAxis].Low?.AddBelow(SplitDivider);
+            _dividers[parAxis].High?.AddAbove(SplitDivider);
             
             _rightChild = new BinaryRoom
             {
                 _rectangle = _rectangle,
-                _dividers = _dividers
+                _dividers = _dividers.ToArray()
             };
             _rightChild._rectangle.Min[perpAxis] = v;
-            _rightChild._dividers.SetDivider(perpAxis, true, SplitDivider);
+            _rightChild._dividers[perpAxis].Low = SplitDivider;
             _rightChild.RandomSplit();
         }
     }
