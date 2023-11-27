@@ -6,10 +6,11 @@ namespace MyDebug
     {
         public Vector2 P0;
         public Vector2 P1;
+        public Color Color;
 
-        public void Draw(Color color)
+        public void Draw()
         {
-            Debug.DrawLine(P0, P1, color);
+            Debug.DrawLine(new Vector3(P0.x, 0, P0.y), new Vector3(P1.x, 0, P1.y), Color);
         }
     }
 }

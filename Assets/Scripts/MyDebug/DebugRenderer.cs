@@ -15,17 +15,17 @@ namespace MyDebug
             Debug.Log("Running Debug Renderer");
             BinaryRoom room = new BinaryRoom(new Rectangle
             {
-                Min = new Vector2(-100, -100), Max = new Vector2(100, 100)
+                Min = new Vector2(-100, -50), Max = new Vector2(100, 50)
             });
             room.RandomSplit();
             foreach (var rect in room.GetRects())
             {
-                _drawables.Add(new DebugRect(rect));
+                _drawables.Add(new DebugRect {Rectangle = rect, Color = Color.blue});
             }
 
             foreach (var (a, b) in room.SplitDivider.GetSegments())
             {
-                _drawables.Add(new DebugSegment { P0 = a, P1 = b });
+                _drawables.Add(new DebugSegment { P0 = a, P1 = b , Color = Color.green});
             }
         }
 
@@ -34,7 +34,7 @@ namespace MyDebug
         {
             foreach (var drawable in _drawables)
             {
-                drawable.Draw(Color.blue);
+                drawable.Draw();
             }
         }
     }

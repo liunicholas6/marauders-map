@@ -4,6 +4,6 @@ namespace MyDebug
 {
     public interface IDebugDrawable
     {
-        void Draw(Color color);
+        void Draw();
     }
 }
