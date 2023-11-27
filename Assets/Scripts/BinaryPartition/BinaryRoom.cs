@@ -13,6 +13,7 @@ namespace BinaryPartition
     {
         private static readonly Vector2 MinDims = new Vector2(8, 8);
         private static readonly Vector2 MaxDims = new Vector2(50, 50);
+        private static readonly Vector2 MaxDims = new Vector2(50, 50);
         private const float TrimSize = 1;
 
         private Rectangle _rectangle;

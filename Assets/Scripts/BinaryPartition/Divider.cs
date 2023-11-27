@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Geom;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace BinaryPartition
@@ -10,7 +8,7 @@ namespace BinaryPartition
     public class Divider : IComparable<Divider>
     {
         private const float EdgeGap = 1;
-        public int ParAxis;
+        private readonly bool isHorizontal;
         public float AxisValue { get; }
         private float _start;
         private float _end;
@@ -20,9 +18,9 @@ namespace BinaryPartition
         public Divider(float axisValue, int parAxis, Rectangle rectangle)
         {
             AxisValue = axisValue;
-            ParAxis = parAxis;
-            _start = rectangle.Min[ParAxis];
-            _end = rectangle.Max[ParAxis];
+            isHorizontal = parAxis == 0;
+            _start = rectangle.Min[parAxis];
+            _end = rectangle.Max[parAxis];
         }
 
         public void AddBelow(Divider divider)
@@ -57,10 +55,13 @@ namespace BinaryPartition
             var segEnds =
                 incidentDividers.Select(divider => divider.AxisValue)
                     .Concat(new[] {_end})
-                    .Select(v => v - EdgeGap);
+                    .Select(v => v).ToList();
+
+            var monotonic = segStarts.Zip(segEnds, (a, b) => a < b).All(x => x);
+            Debug.Log($"Monotonic: {monotonic}");
 
             var segments = segStarts.Zip<float, float, (Vector2, Vector2)>(segEnds,
-                (a, b) => (toPoint(a), toPoint(b)));
+                (a, b) => (toPoint(a + EdgeGap), toPoint(b - EdgeGap)));
 
             return incidentDividers.Aggregate(segments,
                 (current, divider) => current.Concat(divider.GetSegments()));
