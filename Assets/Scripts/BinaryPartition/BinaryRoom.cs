@@ -8,7 +8,7 @@ namespace BinaryPartition
     public class BinaryRoom
     {
         private static readonly Vector2 MinDims = new Vector2(8, 8);
-        private static readonly Vector2 MaxDims = new Vector2(20, 20);
+        private static readonly Vector2 MaxDims = new Vector2(50, 50);
         private const float TrimSize = 1;
 
         private Rectangle _rectangle;
@@ -144,8 +144,8 @@ namespace BinaryPartition
             _leftChild._dividers.SetDivider(perpAxis, false, SplitDivider);
             _leftChild.RandomSplit();
 
-            _dividers.GetDivider(parAxis, false)?.AddDivider(SplitDivider);
-            _dividers.GetDivider(parAxis, true)?.AddDivider(SplitDivider);
+            _dividers.GetDivider(parAxis, false)?.AddBelow(SplitDivider);
+            _dividers.GetDivider(parAxis, true)?.AddAbove(SplitDivider);
             
             _rightChild = new BinaryRoom
             {
