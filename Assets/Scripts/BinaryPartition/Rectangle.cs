@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BinaryPartition
@@ -15,6 +16,24 @@ namespace BinaryPartition
         public float GetDim(int dim)
         {
             return Max[dim] - Min[dim];
+        }
+
+        public List<Vector2> getPoints()
+        {
+            List<Vector2> points = new List<Vector2>();
+            points.Add(new Vector2(Min[0], Min[1]));
+            points.Add(new Vector2(Min[0], Max[1]));
+
+            points.Add(new Vector2(Min[0], Max[1]));
+            points.Add(new Vector2(Max[0], Max[1]));
+
+            points.Add(new Vector2(Max[0], Max[1]));
+            points.Add(new Vector2(Max[0], Min[1]));
+
+            points.Add(new Vector2(Max[0], Min[1]));
+            points.Add(new Vector2(Min[0], Min[1]));
+
+            return points;
         }
     }
     

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Geom
@@ -11,6 +12,14 @@ namespace Geom
         {
             P0 = p0;
             P1 = p1;
+        }
+
+        public List<Vector2> getPoints()
+        {
+            List<Vector2> points = new List<Vector2>();
+            points.Add(P0);
+            points.Add(P1);
+            return points;
         }
 
         public Vector2 AsVector()
