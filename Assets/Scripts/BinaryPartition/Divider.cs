@@ -36,7 +36,7 @@ namespace BinaryPartition
         public IEnumerable<(Vector2, Vector2)> GetSegments()
         {
             var ax = AxisValue;
-            Func<float, Vector2> toPoint = ParAxis == 0 ?
+            Func<float, Vector2> toPoint = isHorizontal ?
                 n => new Vector2(n, ax) :
                 n => new Vector2(ax, n);
 
