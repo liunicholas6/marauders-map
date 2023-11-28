@@ -1,10 +1,7 @@
 #nullable enable
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using UnityEngine;
-using Debug = System.Diagnostics.Debug;
 using Random = UnityEngine.Random;
 
 namespace BinaryPartition
@@ -22,51 +19,6 @@ namespace BinaryPartition
             public Divider? Low;
             public Divider? High;
         }
-        
-        // private struct DividerBox
-        // {
-        //     public Divider? Top;
-        //     public Divider? Bottom;
-        //     public Divider? Left;
-        //     public Divider? Right;
-        //
-        //     public Divider? GetDivider(int axis, bool isMin)
-        //     {
-        //         switch (axis)
-        //         {
-        //             case 0: return isMin ? Left : Right;
-        //             case 1: return isMin ? Bottom : Top;
-        //             default: throw new ArgumentOutOfRangeException();
-        //         }
-        //     }
-        //
-        //     public void SetDivider(int axis, bool isMin, Divider divider)
-        //     {
-        //         switch (axis)
-        //         {
-        //             case 0:
-        //                 if (isMin)
-        //                 {
-        //                     Left = divider;
-        //                 }
-        //                 else
-        //                 {
-        //                     Right = divider;
-        //                 }
-        //                 break;
-        //             case 1: if (isMin)
-        //                 {
-        //                     Bottom = divider;
-        //                 }
-        //                 else
-        //                 {
-        //                     Top = divider;
-        //                 }
-        //                 break;
-        //             default: throw new ArgumentOutOfRangeException();
-        //         }
-        //     }
-        // }
         
         private DividerBounds[] _dividers =
         {
@@ -139,7 +91,7 @@ namespace BinaryPartition
 
         private void SplitPerpToAxis(int perpAxis)
         {
-            int parAxis = 1 - perpAxis;
+            var parAxis = 1 - perpAxis;
             
             var v = Mathf.Lerp(
                 _rectangle.Min[perpAxis] + MinDims[perpAxis], 

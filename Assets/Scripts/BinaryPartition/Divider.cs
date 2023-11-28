@@ -10,10 +10,10 @@ namespace BinaryPartition
         private const float EdgeGap = 1;
         private readonly bool isHorizontal;
         public float AxisValue { get; }
-        private float _start;
-        private float _end;
-        private List<Divider> _below = new();
-        private List<Divider> _above = new();
+        private readonly float _start;
+        private readonly float _end;
+        private readonly List<Divider> _below = new();
+        private readonly List<Divider> _above = new();
 
         public Divider(float axisValue, int parAxis, Rectangle rectangle)
         {
@@ -57,10 +57,7 @@ namespace BinaryPartition
                     .Concat(new[] {_end})
                     .Select(v => v).ToList();
 
-            var monotonic = segStarts.Zip(segEnds, (a, b) => a < b).All(x => x);
-            Debug.Log($"Monotonic: {monotonic}");
-
-            var segments = segStarts.Zip<float, float, (Vector2, Vector2)>(segEnds,
+            var segments = segStarts.Zip(segEnds,
                 (a, b) => (toPoint(a + EdgeGap), toPoint(b - EdgeGap)));
 
             return incidentDividers.Aggregate(segments,
