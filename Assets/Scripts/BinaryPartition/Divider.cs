@@ -40,7 +40,7 @@ namespace BinaryPartition
                 n => new Vector2(n, ax) :
                 n => new Vector2(ax, n);
 
-            List<Divider> incidentDividers = Utils.Merge(_above, _below);
+            var incidentDividers = Utils.Merge(_above, _below);
             
             if (incidentDividers.Count == 0)
             {

@@ -110,8 +110,8 @@ namespace BinaryPartition
             _leftChild._dividers[perpAxis].High = SplitDivider;
             _leftChild.RandomSplit();
 
-            _dividers[parAxis].Low?.AddBelow(SplitDivider);
-            _dividers[parAxis].High?.AddAbove(SplitDivider);
+            _dividers[parAxis].Low?.AddBelow(SplitDivider.Start);
+            _dividers[parAxis].High?.AddAbove(SplitDivider.End);
             
             _rightChild = new BinaryRoom
             {
