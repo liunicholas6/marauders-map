@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Geom;
 using Navigation;
@@ -7,6 +8,11 @@ namespace GraphBuilder
 {
     public class Builder
     {
+        private Builder() {}
+        private static readonly Lazy<Builder> Lazy = new(() => new Builder());
+        public static Builder Instance => Lazy.Value;
+
+
         public struct BEdge
         {
             public EdgeInfo EdgeInfo;
@@ -43,6 +49,10 @@ namespace GraphBuilder
         private int _vertCount = 0;
         private int _edgeCount = 0;
 
+        public VertexId MakeVertex(Vector2 point, VertexTag vertexTag = VertexTag.None)
+        {
+            return MakeVertex(new VertexInfo(new PointRegion(point), vertexTag));
+        }
         public VertexId MakeVertex(VertexInfo vertexInfo)
         {
             _vertexInfos.Add(vertexInfo);
@@ -65,7 +75,7 @@ namespace GraphBuilder
             return AddEdge(new BEdge(fromVertexId.Id, toVertexId.Id, tag, curve));
         }
         
-        public EdgeId MakeEdge(VertexId fromVertexId, VertexId toVertexId, bool navigable, EdgeTag tag)
+        public EdgeId MakeEdge(VertexId fromVertexId, VertexId toVertexId, EdgeTag tag)
         {
             var curve = new LineCurve(GetPosition(fromVertexId), GetPosition(toVertexId));
             return AddEdge(new BEdge(fromVertexId.Id, toVertexId.Id, tag, curve));
