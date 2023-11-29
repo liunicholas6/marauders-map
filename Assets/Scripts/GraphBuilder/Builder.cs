@@ -44,10 +44,10 @@ namespace GraphBuilder
             }
         }
         
-        private readonly List<BEdge> _edges = new();
-        private readonly List<VertexInfo> _vertexInfos = new();
-        private int _vertCount = 0;
-        private int _edgeCount = 0;
+        private static readonly List<BEdge> _edges = new();
+        private static readonly List<VertexInfo> _vertexInfos = new();
+        private static int _vertCount = 0;
+        private static int _edgeCount = 0;
 
         public VertexId MakeVertex(Vector2 point, VertexTag vertexTag = VertexTag.None)
         {
@@ -96,7 +96,7 @@ namespace GraphBuilder
             return _edges[edgeId.Id].Curve;
         }
         
-        public Graph ToGraph()
+        public static Graph ToGraph()
         {
             List<List<EdgeInfo>> adjList = new();
             for (var i = 0; i < _vertCount; i++)

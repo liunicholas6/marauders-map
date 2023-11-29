@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Geom;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 
 namespace Navigation
@@ -13,6 +15,17 @@ namespace Navigation
         {
             _adjList = adjList;
             _vertices = vertices;
+        }
+
+        public IEnumerable<ICurve> Curves()
+        {
+            foreach (var adj in _adjList)
+            {
+                foreach (var edge in adj)
+                {
+                    yield return edge.Curve;
+                }
+            }
         }
 
         // TODO: Insha implements pathfinding algos
