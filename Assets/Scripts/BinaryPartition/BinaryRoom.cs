@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using System.Linq;
+using GraphBuilder;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,6 +9,7 @@ namespace BinaryPartition
 {
     public class BinaryRoom
     {
+        private PartitionRunner _partitionRunner;
         private static readonly Vector2 MinDims = new Vector2(8, 8);
         private static readonly Vector2 MaxDims = new Vector2(50, 50);
         private const float TrimSize = 1;
@@ -34,15 +36,20 @@ namespace BinaryPartition
         {
             get => _leftChild == null && _rightChild == null; 
         }
-        
-        public BinaryRoom(Rectangle rectangle)
+
+        public BinaryRoom(PartitionRunner partitionRunner, Rectangle rectangle)
         {
+            _partitionRunner = partitionRunner;
             _rectangle = rectangle;
         }
 
-        private BinaryRoom()
+        private BinaryRoom MakeChild()
         {
-            
+            var child = new BinaryRoom(_partitionRunner, _rectangle)
+            {
+                _dividers = _dividers.ToArray()
+            };
+            return child;
         }
 
         public void RandomSplit()
@@ -97,15 +104,11 @@ namespace BinaryPartition
                 _rectangle.Min[perpAxis] + MinDims[perpAxis], 
                 _rectangle.Max[perpAxis] - MinDims[perpAxis], 
                 Random.value);
-            SplitDivider = new Divider(v, parAxis, _rectangle);
+            SplitDivider = new Divider(_partitionRunner, v, parAxis, _rectangle);
             
             var leftRect = _rectangle;
             leftRect.Max[perpAxis] = v;
-            _leftChild = new BinaryRoom
-            {
-                _rectangle = _rectangle,
-                _dividers = _dividers.ToArray()
-            };
+            _leftChild = MakeChild();
             _leftChild._rectangle.Max[perpAxis] = v;
             _leftChild._dividers[perpAxis].High = SplitDivider;
             _leftChild.RandomSplit();
@@ -113,11 +116,7 @@ namespace BinaryPartition
             _dividers[parAxis].Low?.AddBelow(SplitDivider.Start);
             _dividers[parAxis].High?.AddAbove(SplitDivider.End);
             
-            _rightChild = new BinaryRoom
-            {
-                _rectangle = _rectangle,
-                _dividers = _dividers.ToArray()
-            };
+            _rightChild = MakeChild();
             _rightChild._rectangle.Min[perpAxis] = v;
             _rightChild._dividers[perpAxis].Low = SplitDivider;
             _rightChild.RandomSplit();

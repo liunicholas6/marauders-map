@@ -16,21 +16,19 @@ namespace MyDebug
         void Start()
         {
             Debug.Log("Running Debug Renderer");
-            BinaryRoom room = new BinaryRoom(new Rectangle
+            Builder builder = new();
+            
+            PartitionRunner runner = new PartitionRunner(builder, new Rectangle
             {
                 Min = new Vector2(-100, -50), Max = new Vector2(100, 50)
             });
-            room.RandomSplit();
-            foreach (var rect in room.GetRects())
-            {
-                _drawables.Add(new DebugRect {Rectangle = rect, Color = Color.blue});
-            }
+            runner.Run();
 
-            foreach (var divider in Divider.AllDividers)
+            foreach (var divider in runner.Dividers)
             {
                 foreach (var edgeId in divider.GetEdges())
                 {
-                    var lineCurve = (LineCurve) Builder.Instance.GetCurve(edgeId);
+                    var lineCurve = (LineCurve) runner.Builder.GetCurve(edgeId);
                     _drawables.Add(new DebugSegment() {P0 = lineCurve.P0, P1 = lineCurve.P1, Color = Color.green});
                 }
             }
