@@ -25,8 +25,10 @@ namespace BinaryPartition
         public void Run()
         {
             _root.RandomSplit();
-            foreach (var _ in from divider in Dividers from _ in divider.GetEdges() select divider)
-            {}
+            foreach (var divider in Dividers)
+            {
+                divider.MakeEdges();
+            }
         }
 
     }

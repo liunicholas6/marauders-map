@@ -50,13 +50,14 @@ namespace BinaryPartition
             _above.Add(vertex);
         }
 
-        public IEnumerable<EdgeId> GetEdges()
+        public void MakeEdges()
         {
             var incidentVertices = Utils.Merge(_above, _below, _comparer);
             
             if (incidentVertices.Count == 0)
             {
-                return new[] {_partitionRunner.Builder.MakeEdge(Start, End, EdgeTag.Hallway)};
+                _partitionRunner.Builder.MakeEdge(Start, End, EdgeTag.Hallway);
+                return;
             }
 
             var segStarts =
@@ -64,9 +65,10 @@ namespace BinaryPartition
             
             var segEnds =
                 incidentVertices.Concat(new[] { End });
-            
-            return segStarts.Zip(segEnds,
-                (u, v) => _partitionRunner.Builder.MakeEdge(u, v, EdgeTag.Hallway));
+
+            foreach (var _ in segStarts.Zip(segEnds, (u, v) => 
+                         _partitionRunner.Builder.MakeEdge(u, v, EdgeTag.Hallway)))
+            { }
         }
     }
 }

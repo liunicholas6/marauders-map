@@ -23,15 +23,17 @@ namespace MyDebug
                 Min = new Vector2(-100, -50), Max = new Vector2(100, 50)
             });
             runner.Run();
+            
+            
 
-            foreach (var divider in runner.Dividers)
-            {
-                foreach (var edgeId in divider.GetEdges())
-                {
-                    var lineCurve = (LineCurve) runner.Builder.GetCurve(edgeId);
-                    _drawables.Add(new DebugSegment() {P0 = lineCurve.P0, P1 = lineCurve.P1, Color = Color.green});
-                }
-            }
+            // foreach (var divider in runner.Dividers)
+            // {
+            //     foreach (var edgeId in divider.GetEdges())
+            //     {
+            //         var lineCurve = (LineCurve) runner.Builder.GetCurve(edgeId);
+            //         _drawables.Add(new DebugSegment() {P0 = lineCurve.P0, P1 = lineCurve.P1, Color = Color.green});
+            //     }
+            // }
             
         }
 
