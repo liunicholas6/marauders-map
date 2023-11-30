@@ -15,12 +15,6 @@ namespace BinaryPartition
         private const float TrimSize = 1;
 
         private Rectangle _rectangle;
-
-        private struct DividerBounds
-        {
-            public Divider? Low;
-            public Divider? High;
-        }
         
         private DividerBounds[] _dividers =
         {
