@@ -29,10 +29,5 @@ namespace BinaryPartition
             {}
         }
 
-        public IEnumerable<Rectangle> GetRects()
-        {
-            return _root.GetRects();
-        }
-
     }
 }

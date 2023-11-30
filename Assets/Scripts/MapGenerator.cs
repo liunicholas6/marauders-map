@@ -31,13 +31,13 @@ public class MapGenerator : MonoBehaviour
 
         List<Vector2> points = new List<Vector2>();
 
-        foreach (var rect in partitionRunner.GetRects())
-        {
-            foreach(var p in rect.getPoints())
-            {
-                points.Add(p);
-            }
-        }
+        // foreach (var rect in partitionRunner.GetRects())
+        // {
+        //     foreach(var p in rect.getPoints())
+        //     {
+        //         points.Add(p);
+        //     }
+        // }
 
         mapRenderer.drawMap(points);
     }

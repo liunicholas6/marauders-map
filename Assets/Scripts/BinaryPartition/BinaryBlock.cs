@@ -9,10 +9,9 @@ namespace BinaryPartition
 {
     public class BinaryBlock
     {
-        private PartitionRunner _partitionRunner;
+        private readonly PartitionRunner _partitionRunner;
         private static readonly Vector2 MinDims = new Vector2(8, 8);
         private static readonly Vector2 MaxDims = new Vector2(50, 50);
-        private const float TrimSize = 1;
 
         private Rectangle _rectangle;
         
@@ -21,15 +20,10 @@ namespace BinaryPartition
             new() {Low = null, High = null},
             new() {Low = null, High = null}
         };
-        
-        public Divider? SplitDivider;
 
+        private Divider? _splitDivider;
         private BinaryBlock? _leftChild;
         private BinaryBlock? _rightChild;
-        private bool IsLeaf
-        {
-            get => _leftChild == null && _rightChild == null; 
-        }
 
         public BinaryBlock(PartitionRunner partitionRunner, Rectangle rectangle)
         {
@@ -68,28 +62,6 @@ namespace BinaryPartition
             }
         }
 
-        public List<Rectangle> GetRects()
-        {
-            List<Rectangle> res = new ();
-            AppendRects(res);
-            return res;
-        }
-
-        public void AppendRects(ICollection<Rectangle> list)
-        {
-            if (IsLeaf)
-            {
-                list.Add(new Rectangle
-                {
-                    Max = _rectangle.Max - new Vector2(TrimSize, TrimSize),
-                    Min = _rectangle.Min + new Vector2(TrimSize, TrimSize)
-                });
-                return;
-            }
-            _leftChild?.AppendRects(list);
-            _rightChild?.AppendRects(list);
-        }
-
         private void SplitPerpToAxis(int perpAxis)
         {
             var parAxis = 1 - perpAxis;
@@ -98,21 +70,21 @@ namespace BinaryPartition
                 _rectangle.Min[perpAxis] + MinDims[perpAxis], 
                 _rectangle.Max[perpAxis] - MinDims[perpAxis], 
                 Random.value);
-            SplitDivider = new Divider(_partitionRunner, v, parAxis, _rectangle);
+            _splitDivider = new Divider(_partitionRunner, v, parAxis, _rectangle);
             
             var leftRect = _rectangle;
             leftRect.Max[perpAxis] = v;
             _leftChild = MakeChild();
             _leftChild._rectangle.Max[perpAxis] = v;
-            _leftChild._dividers[perpAxis].High = SplitDivider;
+            _leftChild._dividers[perpAxis].High = _splitDivider;
             _leftChild.RandomSplit();
 
-            _dividers[parAxis].Low?.AddBelow(SplitDivider.Start);
-            _dividers[parAxis].High?.AddAbove(SplitDivider.End);
+            _dividers[parAxis].Low?.AddBelow(_splitDivider.Start);
+            _dividers[parAxis].High?.AddAbove(_splitDivider.End);
             
             _rightChild = MakeChild();
             _rightChild._rectangle.Min[perpAxis] = v;
-            _rightChild._dividers[perpAxis].Low = SplitDivider;
+            _rightChild._dividers[perpAxis].Low = _splitDivider;
             _rightChild.RandomSplit();
         }
     }
