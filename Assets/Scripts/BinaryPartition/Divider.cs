@@ -9,8 +9,6 @@ namespace BinaryPartition
 {
     public class Divider
     {
-        private const float EdgeGap = 1;
-
         private readonly PartitionRunner _partitionRunner;
         private readonly Comparer<VertexId> _comparer;
         public readonly VertexId Start;

@@ -22,7 +22,7 @@ namespace BinaryPartition
             _bigRect = rectangle;
             _smallRect = new Rectangle
             {
-                Min = _bigRect.Min - Trim,
+                Min = _bigRect.Min + Trim,
                 Max = _bigRect.Max - Trim,
             };
             _builder = builder;

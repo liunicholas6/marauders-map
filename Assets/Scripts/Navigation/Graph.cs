@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using BinaryPartition;
 using Geom;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
@@ -24,6 +25,17 @@ namespace Navigation
                 foreach (var edge in adj)
                 {
                     yield return edge.Curve;
+                }
+            }
+        }
+
+        public IEnumerable<Rectangle> Rectangles()
+        {
+            foreach (var vertex in _vertices)
+            {
+                if (vertex.region is RectangleRegion)
+                {
+                    yield return ((RectangleRegion)vertex.region).Rectangle;
                 }
             }
         }

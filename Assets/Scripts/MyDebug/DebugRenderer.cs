@@ -23,8 +23,19 @@ namespace MyDebug
                 Min = new Vector2(-100, -50), Max = new Vector2(100, 50)
             });
             runner.Run();
-            
-            
+
+            var navGraph = runner.Builder.ToGraph();
+
+            foreach (var curve in navGraph.Curves())
+            {
+                var lineCurve = (LineCurve) curve;
+                _drawables.Add(new DebugSegment() {P0 = lineCurve.P0, P1 = lineCurve.P1, Color = Color.green});
+            }
+
+            foreach (var rectangle in navGraph.Rectangles())
+            {
+                _drawables.Add(new DebugRect {Rectangle = rectangle, Color = Color.blue});
+            }
 
             // foreach (var divider in runner.Dividers)
             // {
@@ -34,7 +45,7 @@ namespace MyDebug
             //         _drawables.Add(new DebugSegment() {P0 = lineCurve.P0, P1 = lineCurve.P1, Color = Color.green});
             //     }
             // }
-            
+
         }
 
         // Update is called once per frame
