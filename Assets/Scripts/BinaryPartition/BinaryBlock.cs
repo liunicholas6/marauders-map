@@ -60,6 +60,11 @@ namespace BinaryPartition
             {
                 SplitPerpToAxis(1);
             }
+            else
+            {
+                var room = new BlockRoom(_dividers, _rectangle, _partitionRunner.Builder);
+                room.AddDoorways();
+            }
         }
 
         private void SplitPerpToAxis(int perpAxis)
