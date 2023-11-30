@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace BinaryPartition
 {
-    public class BinaryRoom
+    public class BinaryBlock
     {
         private PartitionRunner _partitionRunner;
         private static readonly Vector2 MinDims = new Vector2(8, 8);
@@ -30,22 +30,22 @@ namespace BinaryPartition
         
         public Divider? SplitDivider;
 
-        private BinaryRoom? _leftChild;
-        private BinaryRoom? _rightChild;
+        private BinaryBlock? _leftChild;
+        private BinaryBlock? _rightChild;
         private bool IsLeaf
         {
             get => _leftChild == null && _rightChild == null; 
         }
 
-        public BinaryRoom(PartitionRunner partitionRunner, Rectangle rectangle)
+        public BinaryBlock(PartitionRunner partitionRunner, Rectangle rectangle)
         {
             _partitionRunner = partitionRunner;
             _rectangle = rectangle;
         }
 
-        private BinaryRoom MakeChild()
+        private BinaryBlock MakeChild()
         {
-            var child = new BinaryRoom(_partitionRunner, _rectangle)
+            var child = new BinaryBlock(_partitionRunner, _rectangle)
             {
                 _dividers = _dividers.ToArray()
             };

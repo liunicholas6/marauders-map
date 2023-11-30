@@ -9,12 +9,12 @@ namespace BinaryPartition
     {
         public readonly List<Divider> Dividers = new();
         public readonly Builder Builder;
-        private BinaryRoom _root;
+        private BinaryBlock _root;
 
         public PartitionRunner(Builder builder, Rectangle rectangle)
         {
             Builder = builder;
-            _root = new BinaryRoom(this, rectangle);
+            _root = new BinaryBlock(this, rectangle);
         }
 
         public void AddDivider(Divider divider)
