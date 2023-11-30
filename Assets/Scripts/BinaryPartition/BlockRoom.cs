@@ -8,7 +8,7 @@ namespace BinaryPartition
 {
     public class BlockRoom
     {
-        private static readonly Vector2 Trim = new Vector2(1, 1);
+        private static readonly Vector2 Trim = new(1, 1);
         private const float DoorMargin = 4;
 
         private readonly DividerBounds[] _dividers;

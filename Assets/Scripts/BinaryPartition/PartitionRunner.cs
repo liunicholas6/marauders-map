@@ -1,15 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using GraphBuilder;
 
 namespace BinaryPartition
 {
     public class PartitionRunner
     {
-        public readonly List<Divider> Dividers = new();
+        private readonly List<Divider> _dividers = new();
         public readonly Builder Builder;
-        private BinaryBlock _root;
+        private readonly BinaryBlock _root;
 
         public PartitionRunner(Builder builder, Rectangle rectangle)
         {
@@ -19,13 +17,13 @@ namespace BinaryPartition
 
         public void AddDivider(Divider divider)
         {
-            Dividers.Add(divider);
+            _dividers.Add(divider);
         }
 
         public void Run()
         {
             _root.RandomSplit();
-            foreach (var divider in Dividers)
+            foreach (var divider in _dividers)
             {
                 divider.MakeEdges();
             }
