@@ -9,12 +9,13 @@ namespace BinaryPartition
     public class BlockRoom
     {
         private static readonly Vector2 Trim = new Vector2(1, 1);
+        private const float DoorMargin = 4;
 
-        private DividerBounds[] _dividers;
+        private readonly DividerBounds[] _dividers;
         private Rectangle _bigRect;
         private Rectangle _smallRect;
-        private Builder _builder;
-        private VertexId _roomVert;
+        private readonly Builder _builder;
+        private readonly VertexId _roomVert;
 
         public BlockRoom(DividerBounds[] dividers, Rectangle rectangle, Builder builder)
         {
@@ -50,9 +51,11 @@ namespace BinaryPartition
             {
                 return;
             }
-            
             var perpAxis = 1 - parAxis;
-            var val = Mathf.Lerp(_smallRect.Min[perpAxis], _smallRect.Max[perpAxis], Random.value);
+            var val = Mathf.Lerp(
+                _smallRect.Min[perpAxis] + DoorMargin,
+                _smallRect.Max[perpAxis] - DoorMargin,
+                Random.value);
             var position = new Vector2
             {
                 [parAxis] = low ? _bigRect.Min[parAxis] : _bigRect.Max[parAxis],
