@@ -45,7 +45,6 @@ namespace Navigation {
                 wanderers.Add(wander_component);
                 _drawables.Add(new DebugSquare() {position = wander_component.Position});
             }
-
         }
 
         void Update() {
