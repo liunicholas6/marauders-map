@@ -19,6 +19,7 @@ namespace MyDebug
         private EdgeInfo currEdge; 
         private Builder builder = new Builder();
 
+        public GameObject WandererManagerPrefab;
         public GameObject vfx; 
         
         /*** DFS stuff 
@@ -42,8 +43,15 @@ namespace MyDebug
             BuildingGenerator generator = new();
             generator.GenerateBuilding();
             navGraph = generator.Builder.ToGraph();
-            wandererManager = new GameObject("Wanderer Manager").AddComponent<WandererManager>();
+
+
+            // wandererManager = new GameObject("Wanderer Manager").AddComponent<WandererManager>();
+            GameObject managerObj = Instantiate(WandererManagerPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+            wandererManager = managerObj.GetComponent<WandererManager>();
             wandererManager.Initialize(navGraph, vfx);
+
+
+
             foreach (var curve in navGraph.Curves())
             {
                 var lineCurve = curve;

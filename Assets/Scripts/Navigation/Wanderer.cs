@@ -21,8 +21,8 @@ namespace Navigation {
         public EdgeInfo currEdge { get; set; }
         public EdgeInfo endEdge { get; set; }
         public bool justEntered = false;
-        public GameObject wander; 
-    
+        private GameObject wander; 
+        public GameObject FootstepPrefab;
 
         // MOVEMENT
         private float lerpDuration = 1.5f; // You can adjust the duration to control the speed of movement
@@ -32,19 +32,25 @@ namespace Navigation {
         // yum BEZIER STUFF
         private List<Vector2> controlPoints;
         private float movementDuration;
+        
+        // FEET
+        private float timeSinceLastStep = 0;
 
-        public void Initialize(Graph navGraph, EdgeInfo start, EdgeInfo end, PathFinder pathFinder, VisualEffect vfx) {
+        public void Initialize(GameObject wander, Graph navGraph, EdgeInfo start, EdgeInfo end, PathFinder pathFinder, VisualEffect vfx) {
+            this.wander = wander;
             this.navGraph = navGraph;
             this.Position = start.Curve.Point(0);
             this.startEdge = start;
             this.endEdge = end;
             this.pathFinder = pathFinder;
             this.path = pathFinder.FindPath(start, end);
+            this.vfx = vfx;
         }
 
 
         void Update()
         {
+            wander.transform.position = new Vector3(Position.x, 0.0f, Position.y);
             if (isInRoom) return;
             if (!isMoving  && path.Count > 0) {
                 currEdge = path.Pop();
@@ -65,11 +71,32 @@ namespace Navigation {
                 endEdge = navGraph.GetRandomEdge();
                 path = pathFinder.FindPath(currEdge, endEdge);
             }
+
+            //HandleFoot();
+        }
+
+        public void HandleFoot() 
+        {
+            //keep track of displacement
+            //compare to threshold
+            // if (displacement > threshold) {
+                    //spawn foot
+            // }
+            // Quaternion quat = Quaternion.
+            GameObject obj = Instantiate(FootstepPrefab, wander.transform.position, Quaternion.identity);
+            
+            //storage.push_bak(obj)
         }
         
 
         public void MoveTo(Vector2 newPosition)
         {
+            if (Time.time - timeSinceLastStep > 1.5f) {
+                if (Position != newPosition) {
+                GameObject obj = Instantiate(FootstepPrefab, wander.transform.position, Quaternion.identity);
+                timeSinceLastStep = Time.time;
+                }
+            }
             Position = newPosition;
         }
 
