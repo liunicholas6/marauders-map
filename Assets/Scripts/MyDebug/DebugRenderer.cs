@@ -18,6 +18,8 @@ namespace MyDebug
         private Graph navGraph;
         private EdgeInfo currEdge; 
         private Builder builder = new Builder();
+
+        public GameObject vfx; 
         
         /*** DFS stuff 
         private EdgeInfo startEdge;
@@ -42,8 +44,7 @@ namespace MyDebug
             generator.GenerateBuilding();
             navGraph = generator.Builder.ToGraph();
             wandererManager = new GameObject("Wanderer Manager").AddComponent<WandererManager>();
-            wandererManager.Initialize(navGraph);
-
+            wandererManager.Initialize(navGraph, vfx);
             foreach (var curve in navGraph.Curves())
             {
                 var lineCurve = curve;

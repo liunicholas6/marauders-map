@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.VFX;
 
 namespace Navigation {
 
@@ -13,12 +14,15 @@ namespace Navigation {
         public bool isMoving = false;
         public bool isInRoom = false;
         private PathFinder pathFinder;
+        public VisualEffect vfx;
         public Graph navGraph;
         public Stack<EdgeInfo> path;
         public EdgeInfo startEdge { get; set; }
         public EdgeInfo currEdge { get; set; }
         public EdgeInfo endEdge { get; set; }
         public bool justEntered = false;
+        public GameObject wander; 
+    
 
         // MOVEMENT
         private float lerpDuration = 1.5f; // You can adjust the duration to control the speed of movement
@@ -31,8 +35,7 @@ namespace Navigation {
         private List<Vector2> controlPoints;
         private float movementDuration;
 
-        public void Initialize(Graph navGraph, EdgeInfo start, EdgeInfo end, PathFinder pathFinder) {
-
+        public void Initialize(Graph navGraph, EdgeInfo start, EdgeInfo end, PathFinder pathFinder, VisualEffect vfx) {
             this.navGraph = navGraph;
             this.Position = start.Curve.Point(0);
             this.startEdge = start;
